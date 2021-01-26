@@ -1,0 +1,3 @@
+include *.ipynb
+recursive-include data *.png
+recursive-include tests *.py
