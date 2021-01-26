@@ -1,0 +1,7 @@
+imgbasics.egg-info/
+*__pycache__*
+.vscode/
+.eggs/
+.ipynb_checkpoints/
+build/
+dist/

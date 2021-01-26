@@ -1,0 +1,130 @@
+About
+=====
+
+Basic image analysis tools, with the following functions:
+
+- `imcrop()`: image cropping, with interactive options,
+- `contour_properties()`: calculate centroid, area, and perimeter of a contour,
+- `closest_contour()`: closest contour to a position,
+- `contour_coords()`: transform contour from scikit or opencv into usable x, y data,
+
+The package also defines a `ContourError` class as a custom exception for errors in contour calculations.
+
+Install
+=======
+
+```bash
+pip install imgbasics
+```
+
+Quick start
+===========
+
+Below is some information to use available functions. Please also consult docstrings and the Jupyter notebooks **ExamplesBasics.ipynb** for more details and examples.
+
+
+## Image cropping (`imcrop`)
+
+Interactive (or not) image cropping function using Numpy and Matplotlib.
+
+### Non-interactive mode
+
+```python
+img_crop = imcrop(img, cropzone)
+```
+Crops the image img according to a pre-defined crop rectangle `cropzone = xmin, ymin, width, height`. Contrary to the Matlab imcrop function with the same name, the cropped image is really of the width and height requested in terms of number of pixels, not w+1 and h+1 as in Matlab.
+
+### Interactive mode
+
+```python
+img_crop, cropzone = imcrop(img)
+```
+Cropping rectangle is drawn on the image (img) by defining two corners of the rectangle by clicking (cursors help positioning). The returned cropzone corresponds to `xmin, ymin, width, height`.
+
+*Note*: when selecting, the pixels taken into account are those which have
+their centers closest to the click, not their edges closest to the click.
+For example, to crop to a single pixel, one needs to click two times within
+this pixel (possibly at the same location). For images with few pixels,
+this results in a visible offset between the dotted lines plotted after the
+clicks (running through the centers of the pixels clicked) and the final
+rectangle, which runs along the edges of all pixels selected.
+
+
+## Contour properties (`contour_properties`)
+
+Returns centroid position, perimeter and area of a contour as a tuple (x, y, area, perim). Note that the area is signed and thus can be negative. This is the convention for the sign of the area:
+
+| direction      |  imshow image (`plt.imshow()`)  | regular plot (`plt.plot()`)
+| :---:          | :---:                           | :---:
+| clockwise      |   < 0| > 0 |
+| anti-clockwise |  > 0  |  < 0  |
+
+(see **ExamplesBasics.ipynb** for a discussion of the direction of the contours returned by both scikit-image and opencv in different situations).
+
+*Example*
+(Hexagon which rotates anti-clockwise in regular coordinates and clockwise on an imshow plot):
+```python
+import numpy as np
+l = 1 / np.sqrt(3)
+xp = np.array([1, 1, 0, -1, -1, 0])/2
+yp = np.array([-l, l, 2*l, l, -l, -2*l])/2
+x, y, p, a = contour_properties(xp, yp)
+```
+should return
+`x = 0, y = 0, p = 6/sqrt(3) ~ 3.4641, a = -sqrt(3)/2 ~ -0.8660`
+
+
+## Closest contour (`closest_contour`)
+
+Finds the closest contour (within a list of contours obtained by *scikit-image* or *opencv*) to a certain position (tuple (x, y)). Example with the *example.png* image provided in the package (should select the lowest, bright spot)
+
+```python
+from skimage import io, measure
+from imgbasics import closest_contour
+
+img = io.imread('example.png')
+contours = measure.find_contours(img, 170)
+
+c = closest_contour(contours, (221, 281), edge=True, source='scikit')
+```
+- If `edge = True`, returns the contour with the edge closest to the position
+- If `edge = False` (default), returns the contour with the average position closest to position.
+- `source` is the origin of the contours ('scikit' or 'opencv')
+
+*Note:* raises a `ContourError` if no contours in image (`contours` empty).
+
+
+## Contour coordinates (`contour_coords`)
+
+Following the analysis in the section above (contour `c`), the `contour_coords()` function allow to format the contour into directly usable x, y coordinates for plotting directly on the imshow() image. For example, following the code above:
+
+```python
+import matplotlib.pyplot as plt
+from imgbasics import contour_coords
+
+x, y = contour_coords(c, source='scikit')
+
+fig, ax = plt.subplots()
+ax.imshow(img, cmap='gray')
+ax.plot(x, y, -r)
+```
+
+
+# Dependencies
+
+- python >= 3.6
+- matplotlib
+- numpy
+- importlib-metadata
+- drapo >= 1.0.5
+
+
+# Author
+
+Olivier Vincent
+
+(ovinc.py@gmail.com)
+
+# License
+
+BSD 3-clause (see *LICENSE* file)
