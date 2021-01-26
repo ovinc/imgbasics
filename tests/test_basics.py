@@ -66,20 +66,37 @@ def test_contours_1():
 
 # ============== Test imcrop with a random numpy array as image ==============
 
+x = 5
+y = 7
+w = 14
+h = 9
 
 img2 = np.random.randint(0, 256, (20, 20))
-cropzone = [5, 7, 13, 11]
+
+cropzone = x, y, w, h
 img_crop = imcrop(img2, cropzone)
 
 
-def test_imcrop_1():  # check that output of imcrop has correct shape
-    assert img_crop.shape == (11, 13)
+def test_imcrop_1():
+    """Check that output of imcrop in non-interactive mode has correct shape."""
+    assert img_crop.shape == (h, w)
 
 
-def test_imcrop_2():  # check that interactive option returns the same
+def test_imcrop_2():
+    """Check that interactive option returns the same."""
     fig, ax = plt.subplots()
     ax.imshow(img2)
-    _cropzone_draw(ax, cropzone, linecolor='b')
+    _cropzone_draw(ax, cropzone, c='b')
     msg = 'Redefine blue crop zone (click slightly inside of rectangle)'
     img_crop_2, cropzone_2 = imcrop(img2, ax=ax, message=msg)
     assert (img_crop_2 == img_crop).all()
+
+
+def test_imcrop_3():
+    """Check that interactive option with draggable rectangle does the same."""
+    fig, ax = plt.subplots()
+    ax.imshow(img2)
+    _cropzone_draw(ax, cropzone, c='b')
+    msg = 'Redefine blue crop zone by dragging rectangle'
+    img_crop_2, cropzone_2 = imcrop(img2, draggable=True, ax=ax, message=msg)
+    assert img_crop_2.shape == img_crop.shape

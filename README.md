@@ -6,7 +6,7 @@ Basic image analysis tools, with the following functions:
 - `imcrop()`: image cropping, with interactive options,
 - `contour_properties()`: calculate centroid, area, and perimeter of a contour,
 - `closest_contour()`: closest contour to a position,
-- `contour_coords()`: transform contour from scikit or opencv into usable x, y data,
+- `contour_coords()`: transform contour from scikit-image or opencv into usable x, y data,
 
 The package also defines a `ContourError` class as a custom exception for errors in contour calculations.
 
@@ -39,7 +39,11 @@ Crops the image img according to a pre-defined crop rectangle `cropzone = xmin, 
 ```python
 img_crop, cropzone = imcrop(img)
 ```
-Cropping rectangle is drawn on the image (img) by defining two corners of the rectangle by clicking (cursors help positioning). The returned cropzone corresponds to `xmin, ymin, width, height`.
+Cropping rectangle is drawn on the image (img) by either:
+- defining two corners of the rectangle by clicking (default).
+- using a draggable rectangle for selection and pressing "enter" (`draggable=True` option)
+
+The returned cropzone corresponds to `xmin, ymin, width, height`.
 
 *Note*: when selecting, the pixels taken into account are those which have
 their centers closest to the click, not their edges closest to the click.
