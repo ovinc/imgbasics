@@ -1,6 +1,6 @@
 """Image analysis tools."""
 
-from .imcrop import imcrop
+from .cropping import imcrop
 from .contours import closest_contour, contour_properties, contour_coords
 from .contours import ContourError
 

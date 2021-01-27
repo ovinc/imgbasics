@@ -11,7 +11,7 @@ from skimage import io, measure
 # Local module
 import imgbasics
 from imgbasics import contour_properties, closest_contour, imcrop, contour_coords
-from imgbasics.imcrop import _cropzone_draw
+from imgbasics.cropping import _cropzone_draw
 
 
 # =============================== Misc. config ===============================
