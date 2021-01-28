@@ -1,3 +1,4 @@
 include *.ipynb
-recursive-include data *.png
 recursive-include tests *.py
+recursive-include data *.png
+recursive-include data *.gif

@@ -125,13 +125,11 @@ ax.plot(x, y, -r)
 
 With clicks (default):
 
-![](https://raw.githubusercontent.com/ovinc/imgbasics/data/imcrop_demo_clicks.gif)
-
+![](https://raw.githubusercontent.com/ovinc/imgbasics/master/data/imcrop_demo_clicks.gif)
 
 With a draggable rectangle:
 
-![](https://raw.githubusercontent.com/ovinc/imgbasics/data/imcrop_demo_draggable.gif)
-
+![](https://raw.githubusercontent.com/ovinc/imgbasics/master/data/imcrop_demo_draggable.gif)
 
 
 
