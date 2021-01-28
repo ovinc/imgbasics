@@ -100,3 +100,17 @@ def test_imcrop_3():
     msg = 'Redefine blue crop zone by dragging rectangle'
     img_crop_2, cropzone_2 = imcrop(img2, draggable=True, ax=ax, message=msg)
     assert img_crop_2.shape == img_crop.shape
+
+
+# ====================== Test imcrop with a color image ======================
+
+
+def test_imcrop_color():
+    """Check that cropping works ok with a color image as well."""
+    w = 236
+    h = 71
+    zone = 34, 125, w, h
+    imgc = io.imread(datafolder / 'example_color.png')
+    imgcrop = imcrop(imgc, zone)
+    hcrop, wcrop, *_ = imgcrop.shape
+    assert (hcrop, wcrop) == (h, w)

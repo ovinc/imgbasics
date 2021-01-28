@@ -25,19 +25,21 @@ Below is some information to use available functions. Please also consult docstr
 
 ## Image cropping (`imcrop`)
 
-Interactive (or not) image cropping function using Numpy and Matplotlib.
+Image cropping function; the interactive mode allows the user to define the region of interest on the image interactively, either using clicks or a draggable rectangle.
+
+The image `img` is assumed to be already loaded in memory as a numpy array (or equivalent, i.e. that supports slicing and defines `shape` and `ndim` attributes)
 
 ### Non-interactive mode
 
 ```python
-img_crop = imcrop(img, cropzone)
+img_crop = imgbasics.imcrop(img, cropzone)
 ```
-Crops the image img according to a pre-defined crop rectangle `cropzone = xmin, ymin, width, height`. Contrary to the Matlab imcrop function with the same name, the cropped image is really of the width and height requested in terms of number of pixels, not w+1 and h+1 as in Matlab.
+Crops the image `img` according to a pre-defined crop rectangle `cropzone = xmin, ymin, width, height`. Contrary to the Matlab imcrop function with the same name, the cropped image is really of the width and height requested in terms of number of pixels, not w+1 and h+1 as in Matlab.
 
 ### Interactive mode
 
 ```python
-img_crop, cropzone = imcrop(img)
+img_crop, cropzone = imgbasics.imcrop(img)
 ```
 Cropping rectangle is drawn on the image (img) by either:
 - defining two corners of the rectangle by clicking (default).

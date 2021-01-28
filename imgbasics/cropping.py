@@ -1,7 +1,6 @@
 """Cropping image tools and related functions."""
 
 
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from drapo import Cursor, rinput
@@ -20,7 +19,7 @@ def _cropzone_draw(ax, cropzone, c='r', linewidth=2):
     return rect
 
 
-def imcrop(*args, cmap='gray', c='r', closefig=True, cursor=None,
+def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
            draggable=False, message='Crop Image', ax=None):
     """Interactive (or not)image cropping function using Numpy and Matplotlib.
 
@@ -78,7 +77,7 @@ def imcrop(*args, cmap='gray', c='r', closefig=True, cursor=None,
     the width and height requested (w*h), not w+1 and h+1 as in Matlab.
     """
     img = args[0]  # load image
-    sy, sx = img.shape  # size of image in pixels
+    sy, sx, *_ = img.shape  # size of image in pixels
 
     if len(args) == 2:
         interactive = False
@@ -92,6 +91,9 @@ def imcrop(*args, cmap='gray', c='r', closefig=True, cursor=None,
             fig, ax = plt.subplots()
         else:
             fig = ax.figure
+
+        if img.ndim == 2:  # grayscale image, use grayscale colormap
+            cmap = 'gray' if cmap is None else cmap
 
         ax.imshow(img, cmap=cmap)
         ax.set_title(message)
@@ -153,7 +155,7 @@ def imcrop(*args, cmap='gray', c='r', closefig=True, cursor=None,
         _cropzone_draw(ax, cropzone, c)
 
         if closefig:
-            plt.pause(0.2)
+            plt.pause(0.1)
             plt.close(fig)
 
     # Now, in all cases, crop image to desired dimensions --------------------
