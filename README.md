@@ -58,12 +58,12 @@ rectangle, which runs along the edges of all pixels selected.
 
 ## Contour properties (`contour_properties`)
 
-Returns centroid position, perimeter and area of a contour as a tuple (x, y, area, perim). Note that the area is signed and thus can be negative. This is the convention for the sign of the area:
+Returns centroid position, perimeter and area of a contour as a dictionary with keys `'centroid'` (tuple with x and y position), `'perimeter'` (positive float), `'area'` (signed float). The sign convention for the area *A* differs depending on what type of plot is used (because `plt.imshow()` and `plt.plot()` do not use the same coordinate conventions):
 
 | direction      |  imshow image (`plt.imshow()`)  | regular plot (`plt.plot()`)
 | :---:          | :---:                           | :---:
-| clockwise      |   < 0| > 0 |
-| anti-clockwise |  > 0  |  < 0  |
+| clockwise      |  *A* < 0  |  *A* > 0  |
+| anti-clockwise |  *A* > 0  |  *A* < 0  |
 
 (see **ExamplesBasics.ipynb** for a discussion of the direction of the contours returned by both scikit-image and opencv in different situations).
 
@@ -71,14 +71,20 @@ Returns centroid position, perimeter and area of a contour as a tuple (x, y, are
 (Hexagon which rotates anti-clockwise in regular coordinates and clockwise on an imshow plot):
 ```python
 import numpy as np
+from imgbasics import contour_properties
+
 l = 1 / np.sqrt(3)
 xp = np.array([1, 1, 0, -1, -1, 0])/2
 yp = np.array([-l, l, 2*l, l, -l, -2*l])/2
-x, y, p, a = contour_properties(xp, yp)
+
+data = contour_properties(xp, yp)
 ```
 should return
-`x = 0, y = 0, p = 6/sqrt(3) ~ 3.4641, a = -sqrt(3)/2 ~ -0.8660`
-
+```python
+data['centroid'] ~ (0, 0)
+data['perimeter'] = 6 / sqrt(3) ~ 3.4641,
+data['area'] = -sqrt(3)/2 ~ -0.8660
+```
 
 ## Closest contour (`closest_contour`)
 
@@ -114,6 +120,19 @@ fig, ax = plt.subplots()
 ax.imshow(img, cmap='gray')
 ax.plot(x, y, -r)
 ```
+
+# Interactive cropping demo
+
+With clicks (default):
+
+![](https://raw.githubusercontent.com/ovinc/imgbasics/data/imcrop_demo_clicks.gif)
+
+
+With a draggable rectangle:
+
+![](https://raw.githubusercontent.com/ovinc/imgbasics/data/imcrop_demo_draggable.gif)
+
+
 
 
 # Dependencies
