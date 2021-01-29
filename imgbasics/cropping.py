@@ -143,8 +143,8 @@ def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
 
         # Now, get pixels correspongind to clicks (center of a pixel is a
         # round number)
-        xmin, xmax = round(x_min), round(x_max)
-        ymin, ymax = round(y_min), round(y_max)
+        xmin, xmax, ymin, ymax = [int(round(z)) for z in (x_min, x_max,
+                                                          y_min, y_max)]
 
         # Calculate witdh and height in pixels
         w = xmax - xmin + 1
