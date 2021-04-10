@@ -8,7 +8,11 @@ Basic image analysis tools, with the following functions:
 - `closest_contour()`: closest contour to a position,
 - `contour_coords()`: transform contour from scikit-image or opencv into usable x, y data,
 
-The package also defines a `ContourError` class as a custom exception for errors in contour calculations.
+The `imgbasics.transform` module also contains functions mimicking those found in Scikit Image's transform module, but that are based on OpenCV for improved speed. For now it only contains:
+
+- `transform.rotate()`: rotate image
+
+*Note*: the package also defines a `ContourError` class as a custom exception for errors in contour calculations.
 
 Install
 =======
@@ -121,6 +125,17 @@ ax.imshow(img, cmap='gray')
 ax.plot(x, y, -r)
 ```
 
+## Image transformation module (`imgbasics.transform`)
+
+This module mimicks Scikit Image's `transform` module but with calculations based on OpenCV for order-of-magnitude improvement in speed. Right now it only contains the `rotate()` function.
+
+```python
+from imgbasics.transform import rotate
+from skimage import io, transform
+```
+
+
+
 # Interactive cropping demo
 
 With clicks (default):
@@ -140,6 +155,7 @@ With a draggable rectangle:
 - numpy
 - importlib-metadata
 - drapo >= 1.0.5
+- *[optional]* openCV (cv2), only if using the `imgbasics.transform` module (not listed in the install dependencies of the `imgbasics` package)
 
 
 # Author
