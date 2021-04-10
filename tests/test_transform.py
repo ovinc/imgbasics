@@ -27,3 +27,9 @@ def test_transform_rotate():
     """23 degrees rotation with frame resize to fit all rotated image."""
     img_rot = rotate(img, angle=-23, resize=True, order=3)
     assert img_rot.shape == (569, 608)
+
+
+def test_transform_rotate_color():
+    """Same but with a color image, and no resize (same size before/after)."""
+    img_rot = rotate(img_color, angle=-23)
+    assert img_rot.shape == img_color.shape

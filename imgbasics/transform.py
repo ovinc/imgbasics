@@ -31,7 +31,7 @@ def rotate(image, angle, resize=False, center=None, order=None):
     Rotated image array
     """
 
-    sy, sx = image.shape  # note the inversion x / y between numpy and openCV
+    sy, sx, *_ = image.shape  # size of image in pixels (note inversion y/x)
 
     try:
         interpolation_method = orders[order]

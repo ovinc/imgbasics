@@ -127,11 +127,14 @@ ax.plot(x, y, -r)
 
 ## Image transformation module (`imgbasics.transform`)
 
-This module mimicks Scikit Image's `transform` module but with calculations based on OpenCV for order-of-magnitude improvement in speed. Right now it only contains the `rotate()` function.
+This module mimicks Scikit Image's `transform` module but with calculations based on OpenCV for order-of-magnitude improvement (typically more than 10-fold) in speed. Right now it only contains the `rotate()` function.
 
 ```python
 from imgbasics.transform import rotate
-from skimage import io, transform
+from skimage import io
+
+img = io.imread('example.png')
+img_rot = rotate(img, angle=-23, resize=True, order=3)  # bicubic interpolation
 ```
 
 
