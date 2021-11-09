@@ -19,8 +19,8 @@ def _cropzone_draw(ax, cropzone, c='r', linewidth=2):
     return rect
 
 
-def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
-           draggable=False, message='Crop Image', ax=None):
+def imcrop(*args, c='r', closefig=True, cursor=None,
+           draggable=False, message='Crop Image', ax=None, **kwargs):
     """Interactive (or not)image cropping function using Numpy and Matplotlib.
 
     The *args allow to use the function in the two following ways:
@@ -46,8 +46,6 @@ def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
     Other optional parameters
     -------------------------
 
-    - cmap: colormap to display image in matplotlib imshow
-
     - c: color of lines / cursors in interactive mode
 
     - closefig: if True (default), close figure at end of interactive selection
@@ -64,6 +62,10 @@ def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
 
     - ax: if not None, image shown in the ax matplotlib axes
       (only in interactive mode, see above)
+
+    - **kwargs: any kwargs accepted by matplotlib imshow() method
+      (e.g. cmap: colormap to display image in matplotlib imshow
+            vmin, vmax: limiting pixel values to map cmap colors)
 
     Note: when selecting, the pixels taken into account are those which have
     their centers closest to the click, not their edges closest to the click.
@@ -92,10 +94,7 @@ def imcrop(*args, cmap=None, c='r', closefig=True, cursor=None,
         else:
             fig = ax.figure
 
-        if img.ndim == 2:  # grayscale image, use grayscale colormap
-            cmap = 'gray' if cmap is None else cmap
-
-        ax.imshow(img, cmap=cmap)
+        ax.imshow(img, **kwargs)
         ax.set_title(message)
         ax.set_xlabel('Click 2 pts to define crop (opposite corners of rectangle)')
 
