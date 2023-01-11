@@ -94,6 +94,9 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
         else:
             fig = ax.figure
 
+        if 'cmap' not in kwargs and img.ndim < 3:
+            kwargs['cmap'] = 'gray'
+
         ax.imshow(img, **kwargs)
         ax.set_title(message)
         ax.set_xlabel('Click 2 pts to define crop (opposite corners of rectangle)')
