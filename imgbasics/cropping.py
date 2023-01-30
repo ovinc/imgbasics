@@ -3,7 +3,7 @@
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from drapo import Cursor, rinput
+from drapo import ginput, rinput
 
 
 # ======================= IMCROP and related functions =======================
@@ -19,8 +19,17 @@ def _cropzone_draw(ax, cropzone, c='r', linewidth=2):
     return rect
 
 
-def imcrop(*args, c='r', closefig=True, cursor=None,
-           draggable=False, message='Crop Image', ax=None, **kwargs):
+def imcrop(*args,
+           color='r',
+           c=None,
+           cursor=None,
+           draggable=False,
+           message='Crop Image',
+           ax=None,
+           closefig=True,
+           keep_rect=True,
+           keep_lines=False,
+           **kwargs):
     """Interactive (or not)image cropping function using Numpy and Matplotlib.
 
     The *args allow to use the function in the two following ways:
@@ -46,26 +55,32 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
     Other optional parameters
     -------------------------
 
-    - c: color of lines / cursors in interactive mode
+    - color: color of lines / cursors in interactive mode
+
+    - c: shortcut for color (overrides color if set)
+
+    - cursor: appears to help selection by default but not in draggable mode
+              (but can be forced in draggable mode by setting it to true, or
+              can be completely suppressed by setting it to False).
+              Default: None.
+
+    - draggable: if True, use a draggable rectangle instead of clicks
+                 (only in interactive mode, see above)
+
+    - message: message to show as title of the matplotlib window
+               (only in interactive mode, see above)
+
+    - ax: if not None, image shown in the ax matplotlib axes
+          (only in interactive mode, see above)
 
     - closefig: if True (default), close figure at end of interactive selection
 
-    - cursor: appears to help selection by default but not in draggable mode
-      (but can be forced in draggable mode by setting it to true, or can be
-      completely suppressed by setting it to False). Default: None.
-
-    - draggable: if True, use a draggable rectangle instead of clicks
-      (only in interactive mode, see above)
-
-    - message: message to show as title of the matplotlib window
-      (only in interactive mode, see above)
-
-    - ax: if not None, image shown in the ax matplotlib axes
-      (only in interactive mode, see above)
+    - keep_rect: if True (default) and not closefig, keep cropzone rectangle
+                 drawn on image after defining it.
 
     - **kwargs: any kwargs accepted by matplotlib imshow() method
-      (e.g. cmap: colormap to display image in matplotlib imshow
-            vmin, vmax: limiting pixel values to map cmap colors)
+                (e.g. cmap: colormap to display image in matplotlib imshow
+                vmin, vmax: limiting pixel values to map cmap colors)
 
     Note: when selecting, the pixels taken into account are those which have
     their centers closest to the click, not their edges closest to the click.
@@ -89,6 +104,8 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
 
     if interactive:  # Interactive Drawing of Crop Rectangle -----------------
 
+        clr = c if c is not None else color
+
         if ax is None:
             fig, ax = plt.subplots()
         else:
@@ -104,16 +121,15 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
         # Manage cursor visibility depending on mode -------------------------
 
         if cursor is None:
-            cursor = False if draggable else True
-
-        if cursor:
-            Cursor()
+            cursor_active = False if draggable else True
+        else:
+            cursor_active = cursor
 
         # --------------------------------------------------------------------
 
         if draggable:
 
-            x_min, y_min, _w, _h = rinput(c=c)
+            x_min, y_min, _w, _h = rinput(c=clr)
 
             x_max = x_min + _w
             y_max = y_min + _h
@@ -121,10 +137,11 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
         else:
 
             clicks = []
+            lines = []
 
             for i in range(2):  # two clicks for two corners
 
-                [(x_click, y_click)] = plt.ginput(1)
+                [(x_click, y_click)] = ginput(1, cursor=cursor_active, c=clr)
                 clicks.append((x_click, y_click))
 
                 # now, draw for visual clues ---------------------------------
@@ -133,8 +150,9 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
 
                 # draw lines corresponding to click (the -1/2 are used so that
                 # the lines extend to the edges of the pixels)
-                ax.plot([-1 / 2, sx - 1 / 2], [y_draw, y_draw], ':', color=c)
-                ax.plot([x_draw, x_draw], [-1 / 2, sy - 1 / 2], ':', color=c)
+                l1, = ax.plot([-1 / 2, sx - 1 / 2], [y_draw, y_draw], ':', c=clr)
+                l2, = ax.plot([x_draw, x_draw], [-1 / 2, sy - 1 / 2], ':', c=clr)
+                lines.extend([l1, l2])
 
                 fig.canvas.draw()
 
@@ -154,11 +172,18 @@ def imcrop(*args, c='r', closefig=True, cursor=None,
 
         cropzone = xmin, ymin, w, h
 
-        _cropzone_draw(ax, cropzone, c)
+        rect = _cropzone_draw(ax, cropzone, c=clr)
 
         if closefig:
             plt.pause(0.1)
             plt.close(fig)
+
+        else:
+            if not keep_rect:
+                rect.remove()
+            if not keep_lines and not draggable:
+                for line in lines:
+                    line.remove()
 
     # Now, in all cases, crop image to desired dimensions --------------------
 

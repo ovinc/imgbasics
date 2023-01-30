@@ -59,6 +59,10 @@ this results in a visible offset between the dotted lines plotted after the
 clicks (running through the centers of the pixels clicked) and the final
 rectangle, which runs along the edges of all pixels selected.
 
+### Other arguments
+
+Other arguments are available, e.g. for appearance, visibility, axes, etc. of the cropping tools. See docstrings for details.
+
 
 ## Contour properties (`contour_properties`)
 
@@ -157,7 +161,7 @@ With a draggable rectangle:
 - matplotlib
 - numpy
 - importlib-metadata
-- drapo >= 1.0.5
+- drapo >= 1.2.0
 - *[optional]* openCV (cv2), only if using the `imgbasics.transform` module (not listed in the install dependencies of the `imgbasics` package)
 
 
