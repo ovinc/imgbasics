@@ -162,7 +162,7 @@ With a draggable rectangle:
 - numpy
 - importlib-metadata
 - drapo >= 1.2.0
-- *[optional]* openCV (cv2), only if using the `imgbasics.transform` module (not listed in the install dependencies of the `imgbasics` package)
+- *[optional]* openCV (cv2), only if using the `imgbasics.transform` module.
 
 
 # Author

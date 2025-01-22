@@ -6,35 +6,48 @@ import cv2
 
 # Correspondence between interpolation orders and corresponding commands in cv2
 
-orders = {0: cv2.INTER_NEAREST,
-          1: cv2.INTER_LINEAR,
-          3: cv2.INTER_CUBIC,
-          None: cv2.INTER_LINEAR}  # the last one is default
+ORDERS = {
+    0: cv2.INTER_NEAREST,
+    1: cv2.INTER_LINEAR,
+    3: cv2.INTER_CUBIC,
+    None: cv2.INTER_LINEAR,  # the last one is default
+}
+
 
 def rotate(image, angle, resize=False, center=None, order=None):
     """Rotation function similar to skimage.transform.rotate()
 
     Parameters
     ----------
-    - image: image array (numpy array or equivalent)
-    - angle: counter-clockwise rotation angle in degrees
-    - resize: if True, expand image size to fit rotated image entirely
-    - center: tuple of coords of rotation center (ignored if resize is True)
-    - order: interpolation order, can be:
-        - 0 (nearest neighbor)
-        - 1 (bilinear)
-        - 3 (bicubic)
-        (if None, defaults to bilinear)
+    image : array_like
+        image array (numpy array or equivalent)
 
-    Output
-    ------
-    Rotated image array
+    angle : float
+        counter-clockwise rotation angle in degrees
+
+    resize : bool
+        if True, expand image size to fit rotated image entirely
+
+    center : (float, float)
+        coords of rotation center (ignored if resize is True)
+
+    order : int or None
+        interpolation order, can be:
+            - 0 (nearest neighbor)
+            - 1 (bilinear)
+            - 3 (bicubic)
+            (if None, defaults to bilinear)
+
+    Returns
+    -------
+    array_like
+        Rotated image array
     """
 
     sy, sx, *_ = image.shape  # size of image in pixels (note inversion y/x)
 
     try:
-        interpolation_method = orders[order]
+        interpolation_method = ORDERS[order]
     except KeyError:
         raise ValueError(f'{order} not a valid interpolation order.')
 

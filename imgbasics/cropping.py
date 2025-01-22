@@ -10,32 +10,45 @@ from drapo import ginput, rinput
 
 
 def _cropzone_draw(ax, cropzone, c='r', linewidth=2):
-    """Draw cropzone on axes."""
+    """Draw cropzone on axes.
+
+    Parameters
+    ----------
+    cropzone : (int, int, int, int)
+        location of the cropping zone (x, y, width, height)
+    c : str
+        which color to use to draw the zone
+    linewidth : int or float
+        line width to use to draw the zone
+    """
     x, y, w, h = cropzone
-    rect = patches.Rectangle((x - 1 / 2, y - 1 / 2), w, h, linewidth=linewidth,
-                             edgecolor=c, facecolor='none')
+    rect = patches.Rectangle(
+        (x - 1 / 2, y - 1 / 2),
+        w,
+        h,
+        linewidth=linewidth,
+        edgecolor=c,
+        facecolor='none',
+    )
     ax.add_patch(rect)
     ax.figure.canvas.draw()
     return rect
 
 
-def imcrop(*args,
-           color='r',
-           c=None,
-           cursor=None,
-           draggable=False,
-           message='Crop Image',
-           ax=None,
-           closefig=True,
-           keep_rect=True,
-           keep_lines=False,
-           **kwargs):
+def imcrop(
+    *args,
+    color='r',
+    c=None,
+    cursor=None,
+    draggable=False,
+    message='Crop Image',
+    ax=None,
+    closefig=True,
+    keep_rect=True,
+    keep_lines=False,
+    **kwargs,
+):
     """Interactive (or not)image cropping function using Numpy and Matplotlib.
-
-    The *args allow to use the function in the two following ways:
-
-    Main parameters (*args)
-    -----------------------
 
     Depending on how the function is called, the cropping is interactive
     (manual selection on image) or imperative (crop zone (x, y, w, h) as input):
@@ -52,35 +65,48 @@ def imcrop(*args,
     Input --> image (numpy array or equivalent), crop zone (x, y, w, h)
     Output --> cropped image
 
-    Other optional parameters
-    -------------------------
+    Parameters
+    ----------
 
-    - color: color of lines / cursors in interactive mode
+    *args
+        can be (img,) or (img, cropzone)
+        See above.
 
-    - c: shortcut for color (overrides color if set)
+    color : str
+        color of lines / cursors in interactive mode
 
-    - cursor: appears to help selection by default but not in draggable mode
-              (but can be forced in draggable mode by setting it to true, or
-              can be completely suppressed by setting it to False).
-              Default: None.
+    c : str
+        shortcut for color (overrides color if set)
 
-    - draggable: if True, use a draggable rectangle instead of clicks
-                 (only in interactive mode, see above)
+    cursor : bool or None
+        Whether to use or not a cursor to help selection
+        If None (default), use by default but not in draggable mode
+        If True, force in draggable mode,
+        If False, no cursor at all.
 
-    - message: message to show as title of the matplotlib window
-               (only in interactive mode, see above)
+    draggable : bool
+        if True, use a draggable rectangle instead of clicks
+        (only in interactive mode, see above)
 
-    - ax: if not None, image shown in the ax matplotlib axes
-          (only in interactive mode, see above)
+    message : str
+        message to show as title of the matplotlib window
+        (only in interactive mode, see above)
 
-    - closefig: if True (default), close figure at end of interactive selection
+    ax : plt.Axes or None
+        if not None, image shown in the ax matplotlib axes
+        (only in interactive mode, see above)
 
-    - keep_rect: if True (default) and not closefig, keep cropzone rectangle
-                 drawn on image after defining it.
+    closefig : bool
+        if True (default), close figure at end of interactive selection
 
-    - **kwargs: any kwargs accepted by matplotlib imshow() method
-                (e.g. cmap: colormap to display image in matplotlib imshow
-                vmin, vmax: limiting pixel values to map cmap colors)
+    keep_rect : bool
+        if True (default) and not closefig, keep cropzone rectangle drawn on
+        image after defining it.
+
+    **kwargs
+        any kwargs accepted by matplotlib imshow() method
+        (e.g. cmap: colormap to display image in matplotlib imshow
+              vmin, vmax: limiting pixel values to map cmap colors)
 
     Note: when selecting, the pixels taken into account are those which have
     their centers closest to the click, not their edges closest to the click.

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "imgbasics"
+authors = [
+    {name = "Olivier Vincent", email = "ovinc.py@gmail.com"},
+]
+description = "Basic image analysis tools (cropping, contour properties, etc.)"
+readme = "README.md"
+requires-python = ">=3.6"
+keywords = [
+    "image",
+    "analysis",
+    "crop",
+    "imcrop",
+    "cropping",
+    "contour",
+    "contours",
+    "centroid",
+    "perimeter",
+    "area",
+]
+license = {text = "BSD 3-Clause License"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "License :: OSI Approved :: BSD License",
+]
+dependencies = [
+    "matplotlib",
+    "numpy",
+    "importlib-metadata",
+    "drapo >= 1.2.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/ovinc/imgbasics"
+Documentation = "https://github.com/ovinc/imgbasics/README.md"
+Repository = "https://github.com/ovinc/imgbasics.git"
+
+[project.optional-dependencies]
+opencv = ["opencv-python",]
+
+[tool.setuptools.packages.find]
+exclude = ["data",]
+
+[tool.setuptools_scm]
+# can be empty if no extra settings are needed, presence enables setuptools-scm

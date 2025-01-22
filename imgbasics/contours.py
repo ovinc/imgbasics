@@ -20,12 +20,15 @@ def contour_coords(contour, source='scikit'):
 
     Parameters
     ----------
-    contour: contour data
-    source: 'scikit' or 'opencv'
+    contour : array_like
+        Contour data.
+    source : str
+        Can be 'scikit' or 'opencv'.
 
-    Output
-    ------
-    x, y (tuple of numpy arrays) that can be used directly on an imshow() graph
+    Returns
+    -------
+    tuple of numpy arrays
+        (x, y) that can be used directly on an imshow() graph
     """
     if source == 'scikit':
         return contour[:, 1], contour[:, 0]
@@ -41,24 +44,28 @@ def contour_properties(x, y):
 
     Parameters
     ----------
-    x, y : coordinates of contour (arrays that must support math operations)
+    x : array_like
+    y : array_like
+        x, y are the coordinates of contour (must support math operations)
 
-    Output
-    ------
-    Dictionary with keys:
-    - 'centroid': typle (x, y) of centroid position
-    - 'perimeter': contour length (float)
-    - 'area': signed area (float)
-
-    Example
+    Returns
     -------
+    dict
+        Dictionary with keys:
+        - 'centroid': typle (x, y) of centroid position
+        - 'perimeter': contour length (float)
+        - 'area': signed area (float)
+
+    Examples
+    --------
+
     Test can be done with the following hexagon :
 
-    l = 1 / np.sqrt(3)
-    xp = np.array([1, 1, 0, -1, -1, 0])/2
-    yp = np.array([-l, l, 2*l, l, -l, -2*l])/2
+    >>> l = 1 / np.sqrt(3)
+    >>> xp = np.array([1, 1, 0, -1, -1, 0]) / 2
+    >>> yp = np.array([-l, l, 2 * l, l, -l, -2 * l]) / 2
+    >>> x, y, p, a = contour_properties(xp, yp)
 
-    x, y, p, a = contour_properties(xp, yp)
     should return
     x = 0, y = 0, p = 6/sqrt(3) ~ 3.4641, a = -sqrt(3)/2 ~ -0.8660
 
@@ -88,9 +95,11 @@ def contour_properties(x, y):
     xc = Ma / area + xm
     yc = Mb / area + ym
 
-    return {'centroid': (xc, yc),
-            'perimeter': perimeter,
-            'area': area}
+    return {
+        'centroid': (xc, yc),
+        'perimeter': perimeter,
+        'area': area,
+    }
 
 
 def closest_contour(contours, position, edge=False, source='scikit'):
@@ -98,18 +107,22 @@ def closest_contour(contours, position, edge=False, source='scikit'):
 
     Parameters
     ----------
-    - contours: list of contours obtained from skimage or opencv analysis
-    (must be numpy arrays)
-    - position: tuple (x, y)
-    - edge:
-        * if True, returns the contour with the edge closest to the position
-        * if False (default), returns the contour with the average position
+    contours : iterable of array_like
+        list of contours obtained from skimage or opencv analysis
+        (must be numpy arrays)
+    position : tuple of floats
+        position of point (x, y)
+    edge : bool
+        if True, returns the contour with the edge closest to the position
+        if False (default), returns the contour with the average position
         closest to position.
-    - source: 'scikit' or 'opencv'
+    source : str
+        Can be 'scikit' or 'opencv'
 
-    Output
-    ------
-    Contour within the initial list that is the closest to position
+    Returns
+    -------
+    array_like
+        Contour within the initial list that is the closest to position
     """
     if len(contours) == 0:
         raise ContourError('No Contours Available')
