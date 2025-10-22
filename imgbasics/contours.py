@@ -12,11 +12,12 @@ class ContourError(Exception):
 # ======================== General contour functions =========================
 
 
-def contour_coords(contour, source='scikit'):
+def contour_coords(contour, source=None):
     """Extract x, y tuple of contour positions from contour data.
 
     Scikit has reversed x, y coordinates
     OpenCV has an unusual numpy array shape (npts, 1, 2)
+    None corresponds to a tuple (x, y) of data
 
     Parameters
     ----------
@@ -30,7 +31,9 @@ def contour_coords(contour, source='scikit'):
     tuple of numpy arrays
         (x, y) that can be used directly on an imshow() graph
     """
-    if source == 'scikit':
+    if source is None:
+        return contour
+    elif source == 'scikit':
         return contour[:, 1], contour[:, 0]
     elif source == 'opencv':
         contour = contour.squeeze()   # eliminate middle dimension in array
@@ -102,7 +105,7 @@ def contour_properties(x, y):
     }
 
 
-def closest_contour(contours, position, edge=False, source='scikit'):
+def closest_contour(contours, position, edge=False, source=None):
     """Finds the closest contour (skimage) to a certain position (tuple x, y)
 
     Parameters
@@ -117,7 +120,7 @@ def closest_contour(contours, position, edge=False, source='scikit'):
         if False (default), returns the contour with the average position
         closest to position.
     source : str
-        Can be 'scikit' or 'opencv'
+        Can be 'scikit' or 'opencv' or None
 
     Returns
     -------
