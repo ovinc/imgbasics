@@ -47,9 +47,10 @@ def test_contprops():
 img = io.imread(datafolder / 'example.png')
 contours = measure.find_contours(img, 170)
 
+
 def test_contours_1():
 
-    c = closest_contour(contours, (221, 281))  # should select the lowest, white spot
+    c = closest_contour(contours, (221, 281), source='scikit')  # should select the lowest, white spot
     xs, ys = contour_coords(c, source='scikit')
 
     contprops = contour_properties(xs, ys)
