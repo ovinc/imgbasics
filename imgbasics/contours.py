@@ -56,7 +56,7 @@ def contour_properties(x, y):
     dict
         Dictionary with keys:
         - 'centroid': typle (x, y) of centroid position
-        - 'perimeter': contour length (float)
+        - 'perimeter': signed contour length (float)
         - 'area': signed area (float)
 
     Examples
@@ -67,10 +67,12 @@ def contour_properties(x, y):
     >>> l = 1 / np.sqrt(3)
     >>> xp = np.array([1, 1, 0, -1, -1, 0]) / 2
     >>> yp = np.array([-l, l, 2 * l, l, -l, -2 * l]) / 2
-    >>> x, y, p, a = contour_properties(xp, yp)
+    >>> data = contour_properties(xp, yp)
 
     should return
-    x = 0, y = 0, p = 6/sqrt(3) ~ 3.4641, a = -sqrt(3)/2 ~ -0.8660
+        data['centroid'] = (0, 0)
+        data['perimeter'] = 6/sqrt(3) ~ 3.4641
+        data['area'] = -sqrt(3)/2 ~ -0.8660
 
     (area is negative because the contour is anti-clockwise with respect to an
     imshow plot, and clockwise with respect to a standard plot.)
