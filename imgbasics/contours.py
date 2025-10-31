@@ -92,6 +92,15 @@ def contour_properties(x, y):
     area = np.sum(y * dx - x * dy) / 2          # area
     perimeter = np.sum(np.sqrt(dx**2 + dy**2))  # perimeter
 
+    # If area is 0, no need to calculate moments, which will make centroid
+    # calculation bug in any case due to division by zero
+    if area == 0:
+        return {
+            'centroid': (xm, ym),
+            'perimeter': perimeter,
+            'area': area,
+        }
+
     # moments are needed for centroid position calculation
     Ma = np.sum((y * dx**2 - x**2 * dy) / 4 + x * y * dx / 2 + dx**2 * dy / 12)
     Mb = np.sum((y**2 * dx - x * dy**2) / 4 - x * y * dy / 2 - dy**2 * dx / 12)
